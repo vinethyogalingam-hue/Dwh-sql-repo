@@ -1,0 +1,13 @@
+---
+config:
+  theme: neo
+---
+flowchart LR
+    SOURCE["`**Source**<br>branches, customers, employees, loans, accounts, credit cards, payments, and transactions`"] -- push files into landing pad --> STAGING["`**Staging Linux/Win Server**<br>Data pushed on a daily basis into /source path<br>No history`"]
+    STAGING -- Raw data loaded to tables --> DSA["`**DSA - Data Staging Area** <br>Tables may have duplicates and inconsistent data`"]
+    DSA -- Basic Transformations,Clensing/Scrubbing --> ODS["`**ODS - Operational Data Store**<br>Tables in a clensed, scrubbed &amp; minimally transformed state`"]
+    ODS -- Apply business logics & transformation including Dim, Fact & Aggregate tables load --> DWH["`**DWH - Datawarehouse**<br>Centralized repository for all Org data<br>Ensure INTA`"]
+    DWH -- Filter/Join/Aggregate Subject oriented tables --> 
+    MARTS["`**DATA MARTS** <br>Subject oriented Schemas with Fact &amp; Aggregate tables`"]
+    DWH -- Common Organization users --> REPORTING["`**REPORTING** <br>Visualizations &amp; Dashboards <br>Branch Performance<br>Fraud & Risk Detection`"]
+    MARTS -- "Specific clients/users eg. HR, Finance" --> REPORTING
