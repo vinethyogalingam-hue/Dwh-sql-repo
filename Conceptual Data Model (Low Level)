@@ -1,0 +1,10 @@
+Source entity identification
+
+Branch – Represents banking branches.
+Customer – Represents individuals or organizations with accounts/loans/cards.
+Employee – Staff working in branches.
+Account – Customer’s bank accounts (savings, current, etc.).
+Loan – Loan products taken by customers.
+Credit Card – Credit card issued to customers.
+Payment – Payments made through cards, loans, or accounts.
+Transaction – All monetary activities (deposits, withdrawals, transfers, purchases).
