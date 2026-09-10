@@ -1,0 +1,37 @@
+CREATE DATABASE loans_mart_vinethy;
+
+CREATE TABLE loans_mart_vinethy.fact_high_value_loans (
+    LoanID                  bigint,
+    CustomerID              INT,
+    BranchID                INT,
+    Amount                  DECIMAL(18,2),
+    InterestRate            DECIMAL(10,2),
+    StartDate               DATE,
+    EndDate                 DATE,
+    PaymentFrequency        VARCHAR(50),
+    Status                  VARCHAR(50),
+    OutstandingBalance      DECIMAL(18,2),
+    LoanDurationMonths      INT,
+    RiskIndicator            VARCHAR(20),
+    HighValueFlag           CHAR(1),
+    LoanCategory             VARCHAR(30),
+    load_dt                 DATE,
+    load_ts                 TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS edwdb_vinethy.fact_loan_summary (
+    BranchID                INT,
+    RiskIndicator           VARCHAR(20),
+    LoanCount               INT,
+    TotalLoanAmount         DECIMAL(18,2),
+    AverageLoanAmount       DECIMAL(18,2),
+    MaximumLoanAmount       DECIMAL(18,2),
+    MinimumLoanAmount       DECIMAL(18,2),
+    HighValueLoanCount      INT,
+    HighValueLoanAmount     DECIMAL(18,2),
+    ActiveLoanCount         INT,
+    ClosedLoanCount         INT,
+    AverageInterestRate     DECIMAL(10,2),
+    AverageLoanDurationMonths DECIMAL(10,2),
+    load_dt                 DATE,
+    load_ts                 TIMESTAMP);
