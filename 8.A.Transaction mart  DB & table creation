@@ -1,0 +1,29 @@
+create database trans_mart_vinethy;
+CREATE TABLE trans_mart_vinethy.fact_transactions (
+    AccountID VARCHAR(50),
+    Amount DECIMAL(18,2),
+    Currency VARCHAR(10),
+    Description TEXT,
+    EventTs TIMESTAMP,
+    Status VARCHAR(50),
+    Suspicious BOOLEAN,
+    TransactionDate DATE,
+    TransactionFee DECIMAL(18,2),
+    TransactionID VARCHAR(50),
+    TransactionType VARCHAR(50),
+    load_dt DATE,
+    load_ts TIMESTAMP,
+    transaction_flag VARCHAR(10)
+);
+
+CREATE TABLE trans_mart_vinethy.agg_branch_trans_summary (
+    BranchID                INT NOT NULL,
+    BranchName              VARCHAR(100),
+
+    Total_Customers        INT DEFAULT 0,
+    Total_Accounts         INT DEFAULT 0,
+    Total_Balance          DECIMAL(18,2) DEFAULT 0.00,
+    Total_Transactions     DECIMAL(18,2) DEFAULT 0.00,
+
+    load_dt                DATE,
+    load_ts                TIMESTAMP);
