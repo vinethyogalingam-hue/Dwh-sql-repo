@@ -1,0 +1,24 @@
+# SCD Type1 - History is not maintained
+truncate table edwdb_vinethy.dim_customers;
+INSERT INTO edwdb_vinethy.dim_customers (
+    CustomerID,
+    FirstName,
+    LastName,
+    Email,
+    PhoneNumber,
+    Address,
+    DateOfBirth,
+    BranchID,
+    effective_date
+)
+SELECT DISTINCT
+    CustomerID,
+    FirstName,
+    LastName,
+    Email,
+    PhoneNumber,
+    Address,
+    DateOfBirth,
+    BranchID,
+    CURRENT_DATE
+FROM odsdb_vinethy.ods_cust_profile;
