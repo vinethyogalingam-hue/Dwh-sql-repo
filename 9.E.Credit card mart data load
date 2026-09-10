@@ -1,0 +1,43 @@
+# Star Schema Model: Fact Creditcard with UtilizationPercent
+INSERT INTO cc_mart_vinethy.fact_creditcard (
+    customerid,
+    loanid,
+    employeeid,
+    firstname,
+    phonenumber,
+    cardid,
+    cardtype,
+    balance,
+    creditlimit,
+    billcycle,
+    issuedate,
+    utilization_percent,
+    load_dt,
+    load_ts)
+SELECT
+    oc.customerid,
+    NULL AS loanid,
+    NULL AS employeeid,
+    dcu.firstname,
+    dcu.phonenumber,
+    oc.cardid,
+    oc.cardtype,
+    oc.balance,
+    oc.creditlimit,
+    oc.billcycle,
+    oc.issuedate,
+    CASE
+        WHEN oc.creditlimit IS NULL
+             OR oc.creditlimit = 0
+        THEN NULL
+        ELSE ROUND(
+            (oc.balance / oc.creditlimit) * 100,2)
+    END AS utilization_percent,
+    oc.load_dt,
+    oc.load_ts
+FROM odsdb_vinethy.ods_creditcard oc
+LEFT JOIN edwdb_vinethy.dim_customers dcu
+    ON oc.customerid = dcu.customerid
+WHERE oc.load_dt = (
+    SELECT MAX(load_dt)
+    FROM odsdb_vinethy.ods_creditcard);
