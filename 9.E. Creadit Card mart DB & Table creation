@@ -1,0 +1,17 @@
+create database cc_mart_vinethy;
+CREATE TABLE cc_mart_vinethy.fact_creditcard (
+    fact_creditcard_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customerid INT,
+    loanid BIGINT,
+    employeeid INT,
+    firstname VARCHAR(100),
+    phonenumber VARCHAR(20),
+    cardid BIGINT,
+    cardtype VARCHAR(50),
+    balance DECIMAL(15,2),
+    creditlimit DECIMAL(15,2),
+    billcycle VARCHAR(20),
+    issuedate DATE,
+    utilization_percent DECIMAL(5,2),
+    load_dt DATE,
+    load_ts TIMESTAMP);
