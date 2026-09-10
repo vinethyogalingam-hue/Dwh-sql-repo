@@ -1,0 +1,107 @@
+
+# EDW Fact Load
+INSERT INTO edwdb_vinethy.fact_loans (
+    LoanID,
+    CustomerID,
+    BranchID,
+    Amount,
+    InterestRate,
+    StartDate,
+    EndDate,
+    PaymentFrequency,
+    Status,
+    OutstandingBalance,
+    LoanDurationMonths,
+    RiskIndicator,
+    HighValueFlag,
+    load_dt,
+    load_ts
+)
+SELECT distinct
+    o.LoanID,
+    c.CustomerID,          # from dim_customers
+    b.BranchID,            # from dim_branches
+    o.Amount,
+    o.InterestRate,
+    o.StartDate,
+    o.EndDate,
+    o.PaymentFrequency,
+    o.Status,
+    o.Amount AS OutstandingBalance,
+    TIMESTAMPDIFF(MONTH, o.StartDate, o.EndDate) AS LoanDurationMonths,
+    CASE 
+        WHEN o.InterestRate > 12 THEN 'HIGH'
+        WHEN o.InterestRate BETWEEN 8 AND 12 THEN 'MEDIUM'
+        ELSE 'LOW'
+    END AS RiskIndicator,
+    CASE 
+        WHEN o.Amount >= 80000 THEN 'Y'
+        ELSE 'N'
+    END AS HighValueFlag,
+    CURRENT_DATE,
+    CURRENT_TIMESTAMP
+FROM odsdb_vinethy.ods_loans o
+LEFT JOIN edwdb_vinethy.dim_customers c
+    ON o.CustomerID = c.CustomerID
+LEFT JOIN edwdb_vinethy.dim_branches b
+    ON c.BranchID = b.BranchID
+   AND b.is_current = 1;
+
+# EDW Summary Load
+INSERT INTO edwdb_vinethy.fact_loan_summary (
+    BranchID,
+    RiskIndicator,
+    LoanCount,
+    TotalLoanAmount,
+    AverageLoanAmount,
+    MaximumLoanAmount,
+    MinimumLoanAmount,
+    HighValueLoanCount,
+    HighValueLoanAmount,
+    ActiveLoanCount,
+    ClosedLoanCount,
+    AverageInterestRate,
+    AverageLoanDurationMonths,
+    load_dt,
+    load_ts)
+SELECT
+    BranchID,
+    RiskIndicator,
+    COUNT(*) AS LoanCount,
+    SUM(Amount) AS TotalLoanAmount,
+    ROUND(AVG(Amount), 2) AS AverageLoanAmount,
+    MAX(Amount) AS MaximumLoanAmount,
+    MIN(Amount) AS MinimumLoanAmount,
+    SUM(
+        CASE
+            WHEN HighValueFlag = 'Y' THEN 1
+            ELSE 0
+        END
+    ) AS HighValueLoanCount,
+    SUM(
+        CASE
+            WHEN HighValueFlag = 'Y' THEN Amount
+            ELSE 0
+        END
+    ) AS HighValueLoanAmount,
+    SUM(
+        CASE
+            WHEN Status = 'ACTIVE' THEN 1
+            ELSE 0
+        END
+    ) AS ActiveLoanCount,
+    SUM(
+        CASE
+            WHEN Status = 'CLOSED' THEN 1
+            ELSE 0
+        END
+    ) AS ClosedLoanCount,
+    ROUND(AVG(InterestRate), 2) AS AverageInterestRate,
+    ROUND(AVG(LoanDurationMonths), 2)
+        AS AverageLoanDurationMonths,
+    CURRENT_DATE,
+    CURRENT_TIMESTAMP
+FROM edwdb_vinethy.fact_loans
+GROUP BY
+    BranchID,
+    RiskIndicator;
