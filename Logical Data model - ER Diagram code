@@ -1,0 +1,121 @@
+Mermaid ER Diagram Sample Syntax
+
+erDiagram
+Entity1 ||--o{ Entity2 : "relation name"
+User ||--|| SSN : "One to One"
+User ||--|{ Orders : " One to Zero/Many "
+Orders }o--|| User : " Zero/Many to One "
+Users }o--o{ Products : " Zero/Many to Zero/Many "
+Users }|--|{ Products : " One/Many to One/Many "
+
+
+Logical ER Diagram Mermaid Code
+
+erDiagram
+    ACCOUNTS {
+        string AccountID
+        string AccountType
+        float Balance
+        int CreditScore
+        string Currency
+        int CustomerID
+        date DateOpened
+        int ManagerID
+        date load_dt
+        timestamp load_ts
+    }
+    TRANSACTIONS {
+        string AccountID
+        float Amount
+        string Currency
+        string Description
+        datetime EventTs
+        boolean Suspicious
+        date TransactionDate
+        float TransactionFee
+        int TransactionID
+        string TransactionType
+        string Status
+        date load_dt
+        timestamp load_ts
+    }
+    PAYMENTS {
+        float Amount
+        string AuditTrail
+        string ClearingSystem
+        string Currency
+        string CustomerSegment
+        string Description
+        float ExchangeRate
+        float Fee
+        string FromAccountID
+        string MerchantName
+        date PaymentDate
+        int PaymentID
+        string PaymentType
+        string ToAccountID
+        date load_dt
+        timestamp load_ts
+    }
+    CREDITCARD {
+        float Balance
+        string BillCycle
+        string CardID
+        string CardNumber
+        string CardType
+        float CreditLimit
+        int CustomerID
+        date ExpirationDate
+        float InterestRate
+        date IssueDate
+        string Status
+        date load_dt
+        timestamp load_ts
+    }
+    CUST_PROFILE {
+        string Address
+        int BranchID
+        int CustomerID
+        date DateOfBirth
+        string Email
+        string FirstName
+        string LastName
+        string PhoneNumber
+    }
+    EMPLOYEES {
+        int BranchID
+        int EmployeeID
+        string FirstName
+        date HireDate
+        string LastName
+        int ManagerID
+    }
+    BRANCHES {
+        string Address
+        int BranchID
+        string BranchName
+        string City
+        string Status
+        string Zipcode
+    }
+    LOANS {
+        float Amount
+        string Collateral
+        int CustomerID
+        date EndDate
+        float InterestRate
+        int LoanID
+        string LoanType
+        string PaymentFrequency
+        date StartDate
+        string Status
+    }
+    %% Relationships
+    ACCOUNTS ||--o{ TRANSACTIONS : "connected using Account_id"
+    ACCOUNTS ||--o{ PAYMENTS : initiates
+    CUST_PROFILE ||--o{ CREDITCARD : owns
+    ACCOUNTS }o--|| CUST_PROFILE : belongs_to
+    EMPLOYEES }o--|| BRANCHES : works_at
+    CUST_PROFILE }o--|| BRANCHES : located_in
+    CUST_PROFILE ||--o{ LOANS : takes
+    EMPLOYEES ||--o{ EMPLOYEES : manages
