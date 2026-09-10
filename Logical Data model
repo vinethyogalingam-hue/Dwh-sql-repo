@@ -1,0 +1,10 @@
+Entity & Relations
+
+Branch – Employee: Each branch employs many employees. || -- |{
+Branch – Customer: Customers are associated with a branches. || -- |{
+Customer – Account: A customer can have multiple accounts; each account belongs to one customer. || -- |{
+Customer – Loan: One customer can take Zero/One/Many loans. || -- o{
+Customer – Credit Card: A customer can hold multiple credit cards. || -- o{
+Account – Transaction: Each account has many transactions. || -- o{
+Credit Card – Payment: Payments are linked to a credit card. || -- o{
+Loan – Payment: Multiple Payments can also be linked to Multiple loans. }o -- o{
