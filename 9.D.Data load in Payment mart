@@ -1,0 +1,39 @@
+# Fact Payments with derived AmountInBaseCurrency
+INSERT INTO payment_mart_vinethy.fact_payments (
+    Amount,
+    AuditTrial,
+    ClearingSystem,
+    Currency,
+    CustomerSegment,
+    Description,
+    ExchangeRate,
+    Fee,
+    FromAccountID,
+    MerchantName,
+    PaymentDate,
+    PaymentID,
+    PaymentType,
+    ToAccountID,
+    load_dt,
+    load_ts,
+    AmountInBaseCurrency
+)
+SELECT
+    Amount,
+    AuditTrial,
+    ClearingSystem,
+    Currency,
+    CustomerSegment,
+    Description,
+    ExchangeRate,
+    Fee,
+    FromAccountID,
+    MerchantName,
+    PaymentDate,
+    PaymentID,
+    PaymentType,
+    ToAccountID,
+    current_date,
+    current_timestamp,
+    cast(Amount * ExchangeRate as decimal(18,2))
+FROM odsdb_vinethy.ods_payments;
