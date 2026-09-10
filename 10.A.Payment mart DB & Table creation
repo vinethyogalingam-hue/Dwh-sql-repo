@@ -1,0 +1,20 @@
+create database payment_mart_vinethy;
+CREATE TABLE payment_mart_vinethy.fact_payments (
+    Amount DECIMAL(18,2),
+    AuditTrial TEXT,
+    ClearingSystem VARCHAR(50),
+    Currency VARCHAR(10),
+    CustomerSegment VARCHAR(50),
+    Description TEXT,
+    ExchangeRate DECIMAL(10,4),
+    Fee DECIMAL(18,2),
+    FromAccountID VARCHAR(50),
+    MerchantName VARCHAR(100),
+    PaymentDate DATE,
+    PaymentID VARCHAR(50),
+    PaymentType VARCHAR(50),
+    ToAccountID VARCHAR(50),
+    load_dt DATE,
+    load_ts TIMESTAMP,
+    AmountInBaseCurrency DECIMAL(18,2)
+);
