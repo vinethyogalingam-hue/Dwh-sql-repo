@@ -44,3 +44,51 @@ WHERE d.BranchID IS NULL
    OR d.City       <> o.City
    OR d.State      <> o.State
    OR d.Zipcode    <> o.Zipcode;
+
+
+
+INSERT INTO edwdb_vinethy.dim_employees (
+    BranchID,
+    EmployeeID,
+    FirstName,
+    Hiredate,
+    LastName,
+    ManagerID,
+    Position
+)
+SELECT
+    BranchID,
+    EmployeeID,
+    FirstName,
+    Hiredate,
+    LastName,
+    ManagerID,
+    Position
+FROM odsdb_vinethy.ods_employees;
+
+INSERT INTO edwdb_vinethy.dim_loans (
+    Amount,
+    Collateral,
+    CustomerID,
+    EndDate,
+    InterestRate,
+    LoanID,
+    LoanType,
+    PaymentFrequency,
+    StartDate,
+    Status
+)
+SELECT
+    Amount,
+    Collateral,
+    CustomerID,
+    EndDate,
+    InterestRate,
+    LoanID,
+    LoanType,
+    PaymentFrequency,
+    StartDate,
+    Status
+FROM odsdb_vinethy.ods_loans;
+
+
