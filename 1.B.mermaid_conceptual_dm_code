@@ -1,3 +1,14 @@
+Mermaid - Flowchart sample
+
+Copy
+flowchart TD
+    A[Source Systems] --> B[Staging Layer]
+    B --> C[ODS Layer]
+    C --> D[EDW Layer]
+    D --> E[Data Marts]
+    E --> F[BI Reports / Dashboards]
+
+
 ---
 config:
   theme: neo
