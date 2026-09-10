@@ -1,0 +1,45 @@
+# Fact Transactions with transaction_flag derivation
+INSERT INTO trans_mart_vinethy.fact_transactions (
+    AccountID,
+    Amount,
+    Currency,
+    Description,
+    EventTs,
+    Status,
+    Suspicious,
+    TransactionDate,
+    TransactionFee,
+    TransactionID,
+    TransactionType,
+    transaction_flag
+)
+SELECT
+    AccountID,
+    Amount,
+    Currency,
+    Description,
+    EventTs,
+    Status,
+    Suspicious,
+    TransactionDate,
+    TransactionFee,
+    TransactionID,
+    TransactionType,
+    CASE WHEN Suspicious THEN 'FLAGGED' ELSE 'NORMAL' END
+FROM odsdb_vinethy.ods_transactions;
+
+INSERT INTO trans_mart_vinethy.agg_branch_trans_summary
+SELECT 
+    b.BranchID,
+    b.BranchName,
+    COUNT(DISTINCT c.CustomerID) AS Total_Customers,
+    COUNT(DISTINCT a.AccountID) AS Total_Accounts,
+    SUM(a.Balance) AS Total_Balance,
+    SUM(t.Amount) AS Total_Transactions,
+    current_date,
+    current_timestamp
+FROM edwdb_vinethy.dim_branches b
+LEFT JOIN edwdb_vinethy.dim_customers c ON c.BranchID = b.BranchID
+LEFT JOIN odsdb_vinethy.ods_accounts a ON a.CustomerID = c.CustomerID
+LEFT JOIN trans_mart_vinethy.fact_transactions t ON t.AccountID = a.AccountID
+GROUP BY b.BranchID, b.BranchName;
