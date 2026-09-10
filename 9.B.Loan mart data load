@@ -1,0 +1,44 @@
+# EDW to Fact Load - Fact high value loans with LoanCategory derivation
+INSERT INTO loans_mart_vinethy.fact_high_value_loans (
+    LoanID,
+    CustomerID,
+    BranchID,
+    Amount,
+    InterestRate,
+    StartDate,
+    EndDate,
+    PaymentFrequency,
+    Status,
+    OutstandingBalance,
+    LoanDurationMonths,
+    RiskIndicator,
+    HighValueFlag,
+    LoanCategory,
+    load_dt,
+    load_ts
+)
+SELECT
+    LoanID,
+    CustomerID,
+    BranchID,
+    Amount,
+    InterestRate,
+    StartDate,
+    EndDate,
+    PaymentFrequency,
+    Status,
+    OutstandingBalance,
+    LoanDurationMonths,
+    RiskIndicator,
+    HighValueFlag,
+    CASE
+        WHEN RiskIndicator = 'HIGH'
+            THEN 'HIGH_VALUE_HIGH_RISK'
+        WHEN RiskIndicator = 'MEDIUM'
+            THEN 'HIGH_VALUE_MEDIUM_RISK'
+        ELSE 'HIGH_VALUE_LOW_RISK'
+    END AS LoanCategory,
+    CURRENT_DATE,
+    CURRENT_TIMESTAMP
+FROM edwdb_vinethy.fact_loans
+WHERE HighValueFlag = 'Y';
