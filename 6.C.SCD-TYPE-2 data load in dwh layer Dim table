@@ -1,0 +1,46 @@
+# SCD Type 2 Starts here
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE edwdb_vinethy.dim_branches d
+JOIN odsdb_vinethy.ods_branches o
+  ON d.BranchID = o.BranchID
+SET d.end_date = CURRENT_DATE - INTERVAL 1 DAY,
+    d.is_current = 0
+WHERE d.is_current = 1
+  AND (d.Address   <> o.Address
+    OR d.BranchName <> o.BranchName
+    OR d.City       <> o.City
+    OR d.State      <> o.State
+    OR d.Zipcode    <> o.Zipcode);
+
+INSERT INTO edwdb_vinethy.dim_branches (
+    Address,
+    BranchID,
+    BranchName,
+    City,
+    State,
+    Zipcode,
+    start_date,
+    end_date,
+    is_current
+)
+SELECT
+    o.Address,
+    o.BranchID,
+    o.BranchName,
+    o.City,
+    o.State,
+    o.Zipcode,
+    CURRENT_DATE,
+    NULL,
+    1
+FROM odsdb_vinethy.ods_branches o
+LEFT JOIN edwdb_vinethy.dim_branches d
+       ON o.BranchID = d.BranchID
+      AND d.is_current = 1
+WHERE d.BranchID IS NULL
+   OR d.Address   <> o.Address
+   OR d.BranchName <> o.BranchName
+   OR d.City       <> o.City
+   OR d.State      <> o.State
+   OR d.Zipcode    <> o.Zipcode;
