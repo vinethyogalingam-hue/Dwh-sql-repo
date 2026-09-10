@@ -1,0 +1,55 @@
+create database edwdb_vinethy;
+CREATE TABLE edwdb_vinethy.dim_customers (
+    CustomerID VARCHAR(50),
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Email VARCHAR(100),
+    PhoneNumber VARCHAR(20),
+    Address TEXT,
+    DateOfBirth DATE,
+    BranchID VARCHAR(50),
+    load_dt DATE,
+    load_ts TIMESTAMP,
+    effective_date DATE
+);
+
+CREATE TABLE edwdb_vinethy.dim_branches (
+    Address TEXT,
+    BranchID VARCHAR(50),
+    BranchName VARCHAR(100),
+    City VARCHAR(100),
+    State VARCHAR(100),
+    Zipcode VARCHAR(20),
+    load_dt DATE,
+    load_ts TIMESTAMP,
+    start_date DATE,
+    end_date DATE,
+    is_current TINYINT
+);
+
+CREATE TABLE edwdb_vinethy.dim_employees (
+    BranchID VARCHAR(50),
+    EmployeeID VARCHAR(50),
+    FirstName VARCHAR(100),
+    Hiredate DATE,
+    LastName VARCHAR(100),
+    ManagerID VARCHAR(50),
+    Position VARCHAR(100),
+    load_dt DATE,
+    load_ts TIMESTAMP
+);
+
+CREATE TABLE edwdb_vinethy.dim_loans (
+    Amount DECIMAL(18,2),
+    Collateral VARCHAR(100),
+    CustomerID VARCHAR(50),
+    EndDate DATE,
+    InterestRate DECIMAL(5,2),
+    LoanID VARCHAR(50),
+    LoanType VARCHAR(50),
+    PaymentFrequency VARCHAR(20),
+    StartDate DATE,
+    Status VARCHAR(20),
+    load_dt DATE,
+    load_ts TIMESTAMP
+);
